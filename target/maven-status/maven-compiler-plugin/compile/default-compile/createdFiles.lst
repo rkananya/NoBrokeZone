@@ -1,0 +1,6 @@
+com\mongoapp\App.class
+com\mongoapp\view\dbTest.class
+com\mongoapp\view\ExpenseEntry.class
+com\mongoapp\view\Main.class
+com\mongoapp\view\Expense.class
+com\mongoapp\view\Db.class
