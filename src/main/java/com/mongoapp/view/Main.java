@@ -18,7 +18,6 @@ import org.jfree.ui.RefineryUtilities;
 
 
 public class Main extends JFrame {
-    private static Expense expenseTracker = new Expense();
     private static DefaultTableModel tableModel;
     private static JLabel balanceLabel;
     private static JLabel percentSavedLabel;
@@ -36,6 +35,7 @@ public class Main extends JFrame {
     private static JPanel statusPanel;
     private static JPanel userPanel;
     private static String user = "Ananya";
+    private static Expense expenseTracker = new Expense(user);
 
 
     public Main(String title) {
@@ -59,7 +59,7 @@ public class Main extends JFrame {
         JPanel maiPanel = new JPanel(new BorderLayout());
          statusPanel = new JPanel();
         statusPanel.setBackground(new Color(85,105,103));
-        balanceLabel = new JLabel("Balance: $0.0");
+        balanceLabel = new JLabel("Balance: 0.0");
         balanceLabel.setForeground(Color.WHITE);
         percentSavedLabel = new JLabel("Percent Saved: 0%");
         percentSavedLabel.setForeground(Color.WHITE);
@@ -147,10 +147,10 @@ public class Main extends JFrame {
       }
       else{
        double balance = Db.getBalance(user);
-       balanceLabel.setText("Balance: $" + String.format("%.2f", balance)); 
+       balanceLabel.setText("Balance: " + String.format("%.2f", balance)); 
        double percentSaved = Db.getPercentSaved(user);
        percentSavedLabel.setText("Percent Saved: " + String.format("%.2f", percentSaved) + "%");
-       Expense.setIncome(balance);
+       Expense.setIncome(balance,user);
       }
     }
     private static void loadExpensesFromDb(String username) {
@@ -160,7 +160,7 @@ public class Main extends JFrame {
     if (pastExpenses != null) {
         for (String[] row : pastExpenses) {
             // row = {date, category, description, amount}
-            tableModel.addRow(new Object[]{row[0], row[1], row[2], "$" + row[3]});
+            tableModel.addRow(new Object[]{row[0], row[1], row[2], "" + row[3]});
         }
     }
     System.out.println(pastExpenses);
@@ -192,9 +192,8 @@ public class Main extends JFrame {
         try {
             double income = Double.parseDouble(incomeField.getText());
             double targetSavings = Double.parseDouble(targetSavingsField.getText());
-            Db.addIncome(user, income);
-            Expense.setIncome(income);
-            expenseTracker.setTarget(targetSavings);
+            Expense.setIncome(income,user);
+            expenseTracker.setTarget(targetSavings,user);
             updateBalanceAndPercent();
             JOptionPane.showMessageDialog(null, "Income Added Successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
             incomeField.setText("");
@@ -219,7 +218,7 @@ public class Main extends JFrame {
 
             Date date = new Date();
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            tableModel.addRow(new Object[]{sdf.format(date), categoryComboBox.getSelectedItem(), description, "$" + amountSpent});
+            tableModel.addRow(new Object[]{sdf.format(date), categoryComboBox.getSelectedItem(), description,  amountSpent});
  
             updateBalanceAndPercent();
     
@@ -231,7 +230,7 @@ public class Main extends JFrame {
                 statusPanel.setBackground(Color.ORANGE);
             }
             else{
-                statusPanel.setBackground(new Color(128, 64, 255, 128));
+                statusPanel.setBackground(new Color(85,105,103));
             }
     
             updateChart();
@@ -244,7 +243,7 @@ public class Main extends JFrame {
     private static void updateBalanceAndPercent() {
         double balance = Expense.getIncome(user) - expenseTracker.getTotalExpenses(user);
         double percentSaved = expenseTracker.calculatePercentSaved(user);
-        balanceLabel.setText("Balance: $" + String.format("%.2f", balance)); 
+        balanceLabel.setText("Balance:" + String.format("%.2f", balance)); 
         percentSavedLabel.setText("Percent Saved: " + String.format("%.2f", percentSaved) + "%");
         Db.setBalance(user, balance);
         Db.setPercentSaved(user, percentSaved);
@@ -252,7 +251,7 @@ public class Main extends JFrame {
             statusPanel.setBackground(Color.RED);
         }
         else{
-            statusPanel.setBackground(new Color(128, 64, 255, 128));
+            statusPanel.setBackground(new Color(85,105,103));
         }
     }
 

@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class Expense {
     private String description;
@@ -19,10 +21,10 @@ public class Expense {
 
     private Map<String, Double> expensesByCategory = new HashMap<>();
 
-    public Expense() {
+    public Expense(String user) {
         this.description = "";
         this.amountSpent = 0.0; 
-        this.target = 0.0;
+        this.target = Db.getTarget(user);
         this.expenses = new ArrayList<>();
     }
 
@@ -36,12 +38,14 @@ public class Expense {
 
         if (spentAmount >= targetAmount * 0.9) {
             System.out.println("Warning: You have spent 90% of your target savings amount!");
-            System.out.println("Current Balance: $" + currentAmt + ", Target Savings: $" + target);
+            System.out.println("Current Balance: $" + currentAmt + ", Target Savings: " + target);
         }
     }
 public static List<ExpenseEntry> getExpenseEntriesFromDB(String username) {
     List<ExpenseEntry> expenseEntries = new ArrayList<>();
-    List<Document> expenses = Db.getExpenses(username);  // uses embedded expenses array
+    List<Document> expenses = Db.getExpenses(username);  
+
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 
     for (Document doc : expenses) {
         String category = doc.getString("category");
@@ -50,7 +54,9 @@ public static List<ExpenseEntry> getExpenseEntriesFromDB(String username) {
 
         LocalDate date;
         if (doc.containsKey("date")) {
-            date = LocalDate.parse(doc.getString("date"));  // assuming ISO format
+            String dateStr = doc.getString("date");
+            LocalDateTime dateTime = LocalDateTime.parse(dateStr, formatter);
+            date = dateTime.toLocalDate();
         } else if (doc.containsKey("timestamp")) {
             long timestamp = doc.getLong("timestamp");
             date = Instant.ofEpochMilli(timestamp).atZone(ZoneId.systemDefault()).toLocalDate();
@@ -64,24 +70,25 @@ public static List<ExpenseEntry> getExpenseEntriesFromDB(String username) {
     return expenseEntries;
 }
 
+
     public double getTotalExpenses(String user) {
-         List<ExpenseEntry> expenseEntries = getExpenseEntriesFromDB(user);
-    double total = 0.0;
-
-    for (ExpenseEntry entry : expenseEntries) {
-        total += entry.getAmount();
-    }
-
-    return total;
+        List<ExpenseEntry> expenseEntries = getExpenseEntriesFromDB(user);
+        double total = 0.0;
+        for (ExpenseEntry entry : expenseEntries) {
+                total += entry.getAmount();
+        }
+        System.out.println("Expenses" +total);
+        return total;
     }
 
     public double calculatePercentSaved(String user) {
         if (income <= 0) return 0; 
+        System.out.println(1 - (getTotalExpenses(user) / income));
         return (1 - (getTotalExpenses(user) / income)) * 100; 
     }
 
-    public double getTarget() {
-        return target;
+    public double getTarget(String user) {
+        return Db.getTarget(user);
     }
 
     public boolean isNearSpendingLimit(String user) {
@@ -91,17 +98,21 @@ public static List<ExpenseEntry> getExpenseEntriesFromDB(String username) {
     }
 
     
-    public static void setIncome(double income) {
+    public static void setIncome(double income,String user) {
         Expense.income += income;
         Expense.currentAmt += income; 
+        Db.addIncome(user, income);
     }
 
     public static double getIncome(String user) {
+        System.out.println("Income" + Db.getIncome(user));
         return income = Db.getIncome(user);
     }
 
-    public void setTarget(double targetAmount) {
+    public void setTarget(double targetAmount,String user) {
+        this.target+=Db.getTarget(user);
         this.target += targetAmount;
+        Db.setTarget(user, targetAmount);
     }
 
     public void addExpense(String user,String description, String category, double amountSpent) {
