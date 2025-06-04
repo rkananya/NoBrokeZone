@@ -79,24 +79,24 @@ mvn exec:java
 
 ##  ScreenShots :
 **1.Add Income and your saving target:**
-![Screenshot 2025-06-04 135234](https://github.com/user-attachments/assets/4a1b0f65-b769-464d-a980-db005d6e1ec7)
+ - ![Screenshot 2025-06-04 135234](https://github.com/user-attachments/assets/4a1b0f65-b769-464d-a980-db005d6e1ec7)
 
 **2.Add Expense :**
-![Screenshot 2025-06-04 135254](https://github.com/user-attachments/assets/d3a8a19a-d958-4aee-b1a5-c4c56fef6316)
+  - ![Screenshot 2025-06-04 135254](https://github.com/user-attachments/assets/d3a8a19a-d958-4aee-b1a5-c4c56fef6316)
 
 **3. Get warnings:**
-![Screenshot 2025-06-04 135347](https://github.com/user-attachments/assets/de820568-d186-405a-b3f1-2bbf66259bcf)
+  - ![Screenshot 2025-06-04 135347](https://github.com/user-attachments/assets/de820568-d186-405a-b3f1-2bbf66259bcf)
 
 **4.Keep yourself reminded!**:
-![Screenshot 2025-06-04 135358](https://github.com/user-attachments/assets/c7fe93ab-399b-4f73-b857-9576c98ff0ef)
+  - ![Screenshot 2025-06-04 135358](https://github.com/user-attachments/assets/c7fe93ab-399b-4f73-b857-9576c98ff0ef)
 
-[status panel reminds you- that your spending limit is nearing]
+  - [status panel reminds you- that your spending limit is nearing]
 
 **5.View Expenses:**
-![Screenshot 2025-06-04 135406](https://github.com/user-attachments/assets/9939f327-bb51-48bb-9a4f-c921a0b4571d)
+  - ![Screenshot 2025-06-04 135406](https://github.com/user-attachments/assets/9939f327-bb51-48bb-9a4f-c921a0b4571d)
 
 **6.Analyse your expense**
-![Screenshot 2025-06-04 135432](https://github.com/user-attachments/assets/1a1d5e31-1af1-43fa-9f43-c4758d67a151)
+  - ![Screenshot 2025-06-04 135432](https://github.com/user-attachments/assets/1a1d5e31-1af1-43fa-9f43-c4758d67a151)
 
 ---
 ## Final Note:
